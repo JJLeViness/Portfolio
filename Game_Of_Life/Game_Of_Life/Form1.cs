@@ -80,12 +80,13 @@ namespace Game_Of_Life
                         {
                             Grid[row, Col] = false;
                         }
-                        else
+                       
+                    }
+                    else
+                    {
+                        if (Count == 3)
                         {
-                            if (Count == 3)
-                            {
-                                Grid[row, Col] = true;
-                            }
+                            Grid[row, Col] = true;
                         }
                     }
 
