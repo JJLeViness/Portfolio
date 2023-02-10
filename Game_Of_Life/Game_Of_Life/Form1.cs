@@ -92,11 +92,10 @@ namespace Game_Of_Life
                 }
 
 
-                // Increment generation count
-                generations++;
-
-                // Update status strip generations
+               
             }
+            // Increment generation count
+            generations++;
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             universe = Grid;
             graphicsPanel1.Invalidate();
@@ -248,8 +247,19 @@ namespace Game_Of_Life
         {
             timer.Enabled= false;
             generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+
+            for(int y=0;y<universe.GetLength(1);y++)
+            {
+                for(int x=0;x<universe.GetLength(1);x++)
+                {
+                    universe[x, y] = false;
+                }
+                graphicsPanel1.Invalidate();
+            }
             
-            
+
+
 
         }
 
@@ -274,6 +284,16 @@ namespace Game_Of_Life
         {
             NeighbourDisplay = true;
             graphicsPanel1.Invalidate();
+        }
+
+        private void milisecondsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            timer.Interval=100;
+        }
+
+        private void secondsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            timer.Interval= 1000;
         }
     }
 }
