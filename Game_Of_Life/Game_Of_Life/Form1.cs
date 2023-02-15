@@ -32,12 +32,15 @@ namespace Game_Of_Life
         bool NeighbourDisplay=false;
         int Count = 0;
 
+        //Living Cell Display
+        int LivingCells = 0;
+
         public Form1()
         {
             InitializeComponent();
 
             // Setup the timer
-            timer.Interval = 100; // milliseconds
+            timer.Interval = 1000; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false;
         }
@@ -63,13 +66,14 @@ namespace Game_Of_Life
         // Calculate the next generation of cells
         private void NextGeneration()
         {
+            
             bool[,] Grid = new bool[20,20];
             for (int row = 0; row < universe.GetLength(0); row++)
             {
                 for (int Col = 0; Col < universe.GetLength(1); Col++)
                 {
                     int Count = CountNeighbours(row, Col);
-                    if (universe[row, Col])
+                    if (universe[row, Col]==true)
                     {
 
                         if (Count == 2 || Count == 3)
@@ -97,7 +101,8 @@ namespace Game_Of_Life
             }
             // Increment generation count
             generations++;
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            LivingCells=CountLivingCells();
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString()+"   Living Cells = "+LivingCells.ToString();
             universe = Grid;
             graphicsPanel1.Invalidate();
         }
@@ -106,6 +111,20 @@ namespace Game_Of_Life
         private void Timer_Tick(object sender, EventArgs e)
         {
             NextGeneration();
+        }
+
+        private int CountLivingCells()
+        {
+            LivingCells= 0;
+            for(int row=0;row<universe.GetLength(0);row++)
+            {
+                for(int col=0;col<universe.GetLength(1);col++)
+                {
+                    if (universe[row, col]==true) { LivingCells++; }
+                }
+            }
+            return LivingCells;
+
         }
 
 
@@ -295,6 +314,12 @@ namespace Game_Of_Life
         private void secondsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             timer.Interval= 1000;
+        }
+
+        private void offToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NeighbourDisplay=false;
+            graphicsPanel1.Invalidate();
         }
     }
 }
