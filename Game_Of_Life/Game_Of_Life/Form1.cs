@@ -14,8 +14,11 @@ namespace Game_Of_Life
     public partial class Form1 : Form
     {
         // The universe array
-        
-        bool[,] universe = new bool[20,20];
+
+        bool[,] universe = new bool[20, 20];
+
+        //Scratchpad array
+        bool[,] Grid = new bool[20, 20];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -29,8 +32,11 @@ namespace Game_Of_Life
         int generations = 0;
 
         //For Neighbour Counts
-        bool NeighbourDisplay=false;
+        bool NeighbourDisplay = false;
         int Count = 0;
+
+        //View Grid
+        bool GridDisplay = true;
 
         //Living Cell Display
         int LivingCells = 0;
@@ -45,19 +51,59 @@ namespace Game_Of_Life
             timer.Enabled = false;
         }
 
-        private int CountNeighbours(int row, int Col)
+        private void CountLivingCells()
+        {
+            LivingCells = 0;
+            for (int row = 0; row < universe.GetLength(0); row++)
+            {
+                for (int col = 0; col < universe.GetLength(1); col++)
+                {
+                    if (universe[row, col] == true) { LivingCells++; }
+                }
+            }
+
+
+        }
+
+        private int CountNeighbours(int row, int Col) //Finite Count using sketch notes
         {
             int count = 0;
-            if (row - 1 >= 0 && Col - 1 >= 0 && universe[row - 1, Col - 1] == true) { count++; }
-            
-            if (row - 1 >= 0 && universe[row - 1, Col] == true) { count++; }
-            if (row - 1 >= 0 && Col + 1 < 20 && universe[row - 1, Col + 1] == true) { count++;}
-            if (Col - 1 >= 0 && universe[row,Col-1] == true) { count++; }
-            if (Col + 1 < 20 && universe[row,Col+1] == true) { count++; }
-            if (row + 1 < 20 && Col - 1 >= 0 && universe[row+1,Col-1] == true) { count++; }
-            if (row + 1 < 20 && universe[row+1,Col] == true) { count++; }
-            if (row + 1 < 20 && Col + 1 < 20 && universe[row+1,Col+1] == true) { count++; }
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
 
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int rowcheck = row + xOffset;
+                    int Colcheck = Col + yOffset;
+                    if (yOffset == 0 && xOffset == 0)
+                    {
+                        continue;
+                    }
+                    if (rowcheck < 0)
+                    {
+                        continue;
+
+                    }
+                    if (Colcheck < 0)
+                    {
+                        continue;
+                    }
+                    if (rowcheck >= xLen)
+                    {
+                        continue;
+                    }
+                    if (Colcheck >= yLen)
+                    {
+                        continue;
+                    }
+                    if (universe[rowcheck, Colcheck] == true)
+                    {
+                        count++;
+                    }
+                }
+            }
             return count;
 
 
@@ -66,14 +112,14 @@ namespace Game_Of_Life
         // Calculate the next generation of cells
         private void NextGeneration()
         {
-            
-            bool[,] Grid = new bool[20,20];
+
+
             for (int row = 0; row < universe.GetLength(0); row++)
             {
                 for (int Col = 0; Col < universe.GetLength(1); Col++)
                 {
                     int Count = CountNeighbours(row, Col);
-                    if (universe[row, Col]==true)
+                    if (universe[row, Col] == true)
                     {
 
                         if (Count == 2 || Count == 3)
@@ -84,7 +130,7 @@ namespace Game_Of_Life
                         {
                             Grid[row, Col] = false;
                         }
-                       
+
                     }
                     else
                     {
@@ -92,17 +138,21 @@ namespace Game_Of_Life
                         {
                             Grid[row, Col] = true;
                         }
+                        else
+                        {
+                            Grid[row, Col] = false;
+                        }
                     }
 
                 }
 
 
-               
+
             }
             // Increment generation count
             generations++;
-            LivingCells=CountLivingCells();
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString()+"   Living Cells = "+LivingCells.ToString();
+            CountLivingCells();
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
             universe = Grid;
             graphicsPanel1.Invalidate();
         }
@@ -113,19 +163,7 @@ namespace Game_Of_Life
             NextGeneration();
         }
 
-        private int CountLivingCells()
-        {
-            LivingCells= 0;
-            for(int row=0;row<universe.GetLength(0);row++)
-            {
-                for(int col=0;col<universe.GetLength(1);col++)
-                {
-                    if (universe[row, col]==true) { LivingCells++; }
-                }
-            }
-            return LivingCells;
 
-        }
 
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
@@ -159,26 +197,29 @@ namespace Game_Of_Life
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
-                        if(NeighbourDisplay==true)
+                        if (NeighbourDisplay == true)
                         {
                             Font font = new Font("Retrieve", 10f);
-                            StringFormat NumberFormat=new StringFormat();
-                            NumberFormat.Alignment= StringAlignment.Center;
+                            StringFormat NumberFormat = new StringFormat();
+                            NumberFormat.Alignment = StringAlignment.Center;
                             NumberFormat.LineAlignment = StringAlignment.Center;
-                            Count=CountNeighbours(x, y);
+                            Count = CountNeighbours(x, y);
                             if (Count > 3 || Count < 2)
                             {
                                 e.Graphics.DrawString(Count.ToString(), font, Brushes.Black, cellRect, NumberFormat);
                             }
                             else
                             {
-                                e.Graphics.DrawString(Count.ToString(),font,Brushes.Green, cellRect, NumberFormat);
+                                e.Graphics.DrawString(Count.ToString(), font, Brushes.Green, cellRect, NumberFormat);
                             }
                         }
                     }
 
                     // Outline the cell with a pen
-                    e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    if (GridDisplay == true)
+                    {
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    }
                 }
             }
 
@@ -265,19 +306,20 @@ namespace Game_Of_Life
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)//new 
         {
-            timer.Enabled= false;
+            timer.Enabled = false;
             generations = 0;
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            CountLivingCells();
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
 
-            for(int y=0;y<universe.GetLength(1);y++)
+            for (int y = 0; y < universe.GetLength(1); y++)
             {
-                for(int x=0;x<universe.GetLength(1);x++)
+                for (int x = 0; x < universe.GetLength(1); x++)
                 {
                     universe[x, y] = false;
                 }
                 graphicsPanel1.Invalidate();
             }
-            
+
 
 
 
@@ -286,13 +328,13 @@ namespace Game_Of_Life
         private void toolStripButton1_Click(object sender, EventArgs e)//Play Button
         {
             timer.Enabled = true;
-            
+
 
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)//Pause Button
         {
-            timer.Enabled=false;
+            timer.Enabled = false;
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)//Next Button
@@ -300,26 +342,72 @@ namespace Game_Of_Life
             NextGeneration();
         }
 
-        private void neighbourCountsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            NeighbourDisplay = true;
-            graphicsPanel1.Invalidate();
-        }
+        
 
         private void milisecondsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            timer.Interval=100;
+            timer.Interval = 100;
         }
 
         private void secondsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            timer.Interval= 1000;
+            timer.Interval = 1000;
         }
 
         private void offToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NeighbourDisplay=false;
+            NeighbourDisplay = false;
             graphicsPanel1.Invalidate();
+        }
+
+        private void newCustomToolStripMenuItem_Click(object sender, EventArgs e)//Custom Universe size Entry
+        {
+
+        }
+
+        private void newRandomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            for (int row = 0; row < universe.GetLength(0); row++)
+            {
+                for (int col = 0; col < universe.GetLength(1); col++)
+                {
+                    int rand = random.Next();
+
+                    if (rand % 4 == 0) { Grid[row, col] = true; }
+                }
+            }
+            universe = Grid;
+            timer.Enabled = false;
+            generations = 0;
+            CountLivingCells();
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GridDisplay= true;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void offToolStripMenuItem1_Click(object sender, EventArgs e)//Turn off Grid Outline
+        {
+            GridDisplay= false;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void onToolStripMenuItem1_Click(object sender, EventArgs e)//Turn on Neighbour Count
+        {
+            NeighbourDisplay= true;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void offToolStripMenuItem_Click_1(object sender, EventArgs e)//Turn Off Neighbour Count
+        {
+            NeighbourDisplay= false;
+            graphicsPanel1.Invalidate();
+
         }
     }
 }
