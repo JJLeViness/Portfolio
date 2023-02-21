@@ -9,3 +9,5 @@ C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Ga
 C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Game_Of_Life.csproj.CoreCompileInputs.cache
 C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Game_Of_Life.exe
 C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Game_Of_Life.pdb
+C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Game_Of_Life.Save_Dialogue.resources
+C:\Users\jlevi\OneDrive\Desktop\Portfolio\Game_Of_Life\Game_Of_Life\obj\Debug\Game_Of_Life.Properties.NumberChange.resources
