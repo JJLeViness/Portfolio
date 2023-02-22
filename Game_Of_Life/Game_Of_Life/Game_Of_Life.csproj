@@ -56,6 +56,12 @@
     <Compile Include="GraphicsPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="HeadsUp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HeadsUp.Designer.cs">
+      <DependentUpon>HeadsUp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\NumberChange.cs">
@@ -64,14 +70,11 @@
     <Compile Include="Properties\NumberChange.Designer.cs">
       <DependentUpon>NumberChange.cs</DependentUpon>
     </Compile>
-    <Compile Include="Save Dialogue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Save Dialogue.Designer.cs">
-      <DependentUpon>Save Dialogue.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HeadsUp.resx">
+      <DependentUpon>HeadsUp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\NumberChange.resx">
       <DependentUpon>NumberChange.cs</DependentUpon>
@@ -86,9 +89,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Save Dialogue.resx">
-      <DependentUpon>Save Dialogue.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

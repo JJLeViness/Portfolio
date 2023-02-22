@@ -22,5 +22,77 @@ namespace Game_Of_Life.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color PanelColor {
+            get {
+                return ((global::System.Drawing.Color)(this["PanelColor"]));
+            }
+            set {
+                this["PanelColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gray")]
+        public global::System.Drawing.Color CellColor {
+            get {
+                return ((global::System.Drawing.Color)(this["CellColor"]));
+            }
+            set {
+                this["CellColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0, 64")]
+        public global::System.Drawing.Color GridColor {
+            get {
+                return ((global::System.Drawing.Color)(this["GridColor"]));
+            }
+            set {
+                this["GridColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int Rows {
+            get {
+                return ((int)(this["Rows"]));
+            }
+            set {
+                this["Rows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int Columns {
+            get {
+                return ((int)(this["Columns"]));
+            }
+            set {
+                this["Columns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int TimerSpeed {
+            get {
+                return ((int)(this["TimerSpeed"]));
+            }
+            set {
+                this["TimerSpeed"] = value;
+            }
+        }
     }
 }

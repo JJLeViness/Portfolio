@@ -30,6 +30,9 @@ namespace Game_Of_Life
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Gray;
+        
+        
+        
 
 
         // The Timer class
@@ -61,21 +64,33 @@ namespace Game_Of_Life
             timer.Interval = 1000; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false;
+            cellColor =Properties.Settings.Default.CellColor;
+            gridColor= Properties.Settings.Default.GridColor;
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+            Rows = Properties.Settings.Default.Rows;
+            Cols=Properties.Settings.Default.Columns;
+            timer.Interval = Properties.Settings.Default.TimerSpeed;
+            
         }
 
-        private void CountLivingCells()
+        private int LivingCellsCount(int LivingCells)
         {
             LivingCells = 0;
-            for (int row = 0; row < universe.GetLength(0); row++)
+            for (int col = 0; col < universe.GetLength(1); col++)
             {
-                for (int col = 0; col < universe.GetLength(1); col++)
+                for (int row = 0; row < universe.GetLength(0); row++)
                 {
-                    if (universe[row, col] == true) { LivingCells++; }
+                    if (universe[row, col])
+                    {
+                        LivingCells++;
+                    }
                 }
             }
-
-
+            return LivingCells;
         }
+        
+
+       
 
         private int CountNeighbours(int row, int Col) //Finite Count using sketch notes
         {
@@ -229,10 +244,22 @@ namespace Game_Of_Life
                 }
             
             }
+            //Method to count living cells total
+            LivingCells = 0;
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (universe[x, y])
+                    {
+                        LivingCells++;
+                    }
+                }
+            }
             // Increment generation count
             generations++;
-            CountLivingCells();
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabel1.Text="Living Cells ="+LivingCells.ToString();
             universe = Grid;
             graphicsPanel1.Invalidate();
         }
@@ -325,6 +352,15 @@ namespace Game_Of_Life
 
                 // Toggle the cell's state
                 universe[x, y] = !universe[x, y];
+                if (universe[x,y])
+                {
+                    LivingCells++;
+                }
+                else
+                {
+                    LivingCells--;
+                }
+                toolStripStatusLabel1.Text = "Living Cells = " + LivingCells.ToString();
 
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
@@ -388,8 +424,9 @@ namespace Game_Of_Life
         {
             timer.Enabled = false;
             generations = 0;
-            CountLivingCells();
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
+            LivingCells= 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabel1.Text="Living Cells = "+LivingCells.ToString();
 
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -457,8 +494,19 @@ namespace Game_Of_Life
             universe = Grid;
             timer.Enabled = false;
             generations = 0;
-            CountLivingCells();
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString() + "   Living Cells = " + LivingCells.ToString();
+            LivingCells = 0;
+            for(int col = 0; col< universe.GetLength(1);col++)
+            {
+                for(int row=0;row<universe.GetLength(0);row++)
+                {
+                    if (universe[row,col])
+                    {
+                        LivingCells++;
+                    }
+                }
+            }
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+                toolStripStatusLabel1.Text=" Living Cells = "+LivingCells.ToString();    
             graphicsPanel1.Invalidate();
         }
 
@@ -500,9 +548,9 @@ namespace Game_Of_Life
                 
             }
             Grid = new bool[Rows,Cols];
-            for(int x=0;x<Cols&&x<universe.GetLength(0);x++)
+            for(int x=0;x<Cols&&x<universe.GetLength(1);x++)
             {
-                for(int y=0;y<Rows&&y<universe.GetLength(1);y++)
+                for(int y=0;y<Rows&&y<universe.GetLength(0);y++)
                 {
                     Grid[x, y] = universe[x,y];
                     
@@ -525,6 +573,8 @@ namespace Game_Of_Life
             if (DialogResult.OK == save.ShowDialog())
             {
                 StreamWriter Saver = new StreamWriter(save.FileName);
+                Saver.WriteLine('!' + save.FileName);//! added to define comments in file
+                Saver.WriteLine('!' + "Saved on " + DateTime.Now);
                 for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     string Row = "";
@@ -564,6 +614,8 @@ namespace Game_Of_Life
                 while(!Load.EndOfStream)
                 {
                     string DocLength = Load.ReadLine();
+                    if (DocLength[0]=='!')//Ignore Comments to get proper universe size
+                    { continue; }
                     Height++;
 
                     if(Width<DocLength.Length)
@@ -579,6 +631,8 @@ namespace Game_Of_Life
                 {
                     
                     string row= Load.ReadLine();
+                    if (row[0]=='!')//Ignore Comments in File
+                    { continue; }   
                     for(int x=0;x<row.Length;x++)
                     {
                         if (row[x]=='O')
@@ -617,7 +671,7 @@ namespace Game_Of_Life
             timer.Interval = timer.Interval / 2;
         }
 
-        private void ChangeBackPanel_Click(object sender, EventArgs e)
+        private void ChangeBackPanel_Click(object sender, EventArgs e)//Change BackPanel Color
         {
             ColorDialog Color=new ColorDialog();
             if(DialogResult.OK==Color.ShowDialog())
@@ -625,6 +679,90 @@ namespace Game_Of_Life
                 graphicsPanel1.BackColor = Color.Color;
 
             }
+        }
+
+        private void SlowTimer_Click(object sender, EventArgs e)//Speed up Timer
+        {
+            timer.Interval = timer.Interval * 2;
+        }
+
+        private void ResetColors_Click(object sender, EventArgs e)
+        {
+            cellColor = Color.Gray;
+            gridColor = Color.Black;
+            graphicsPanel1.BackColor = Color.White;
+            Rows = 20;
+            Cols= 20;
+            Grid = new bool[Rows, Cols];
+            for (int x = 0; x < Cols && x < universe.GetLength(1); x++)
+            {
+                for (int y = 0; y < Rows && y < universe.GetLength(0); y++)
+                {
+                    Grid[x, y] = universe[x, y];
+
+                }
+            }
+            universe = Grid;
+            
+            graphicsPanel1.Invalidate();
+            
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.CellColor = cellColor;
+            Properties.Settings.Default.GridColor = gridColor;
+            Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
+            Properties.Settings.Default.Rows = Rows;
+            Properties.Settings.Default.Columns = Cols;
+            Properties.Settings.Default.TimerSpeed = timer.Interval;
+            Properties.Settings.Default.Save();
+            
+        }
+
+        private void onToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            HeadsUp Display=new HeadsUp();
+            Display.SetGeneration("Generation = "+generations.ToString());
+            Display.SetLivingCells("Living Cells = "+ LivingCells.ToString());
+            Display.SetRows("Number of Rows = "+Rows.ToString());
+            Display.SetCols("Number of Columns = "+Cols.ToString());
+            if(CountStyle==true)
+            {
+                Display.SetBoundaryStyle("Boundary Style = Toroidal");
+            }
+            else
+            {
+                Display.SetBoundaryStyle("Boundary Style = Finite");
+            }
+            
+           if(DialogResult.OK==Display.ShowDialog())
+            {
+
+            }
+        }
+
+        private void toolStripButton4_Click_1(object sender, EventArgs e)
+        {
+            HeadsUp Display = new HeadsUp();
+            Display.SetGeneration("Generation = " + generations.ToString());
+            Display.SetLivingCells("Living Cells = " + LivingCells.ToString());
+            Display.SetRows("Number of Rows = " + Rows.ToString());
+            Display.SetCols("Number of Columns = " + Cols.ToString());
+            if (CountStyle == true)
+            {
+                Display.SetBoundaryStyle("Boundary Style = Toroidal");
+            }
+            else
+            {
+                Display.SetBoundaryStyle("Boundary Style = Finite");
+            }
+
+            if (DialogResult.OK == Display.ShowDialog())
+            {
+
+            }
+
         }
     }
 }
