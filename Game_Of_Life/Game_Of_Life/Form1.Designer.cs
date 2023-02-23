@@ -73,26 +73,26 @@
             this.viewNeighbourCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.headsUpDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.InfoDisplay = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.SpeedUp = new System.Windows.Forms.ToolStripButton();
             this.SlowTimer = new System.Windows.Forms.ToolStripButton();
             this.ChangeBackPanel = new System.Windows.Forms.ToolStripButton();
-            this.ResetColors = new System.Windows.Forms.ToolStripButton();
+            this.ResetToDefault = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.headsUpDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.InfoDisplay = new System.Windows.Forms.ToolStripButton();
             this.graphicsPanel1 = new Game_Of_Life.GraphicsPanel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -448,6 +448,21 @@
             this.offToolStripMenuItem.Text = "Off";
             this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click_1);
             // 
+            // headsUpDisplayToolStripMenuItem
+            // 
+            this.headsUpDisplayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.onToolStripMenuItem2});
+            this.headsUpDisplayToolStripMenuItem.Name = "headsUpDisplayToolStripMenuItem";
+            this.headsUpDisplayToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.headsUpDisplayToolStripMenuItem.Text = "Information Display";
+            // 
+            // onToolStripMenuItem2
+            // 
+            this.onToolStripMenuItem2.Name = "onToolStripMenuItem2";
+            this.onToolStripMenuItem2.Size = new System.Drawing.Size(140, 22);
+            this.onToolStripMenuItem2.Text = "View Display";
+            this.onToolStripMenuItem2.Click += new System.EventHandler(this.onToolStripMenuItem2_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -461,7 +476,7 @@
             this.SpeedUp,
             this.SlowTimer,
             this.ChangeBackPanel,
-            this.ResetColors});
+            this.ResetToDefault});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(573, 25);
@@ -497,6 +512,16 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "Play";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // InfoDisplay
+            // 
+            this.InfoDisplay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.InfoDisplay.Image = ((System.Drawing.Image)(resources.GetObject("InfoDisplay.Image")));
+            this.InfoDisplay.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.InfoDisplay.Name = "InfoDisplay";
+            this.InfoDisplay.Size = new System.Drawing.Size(23, 22);
+            this.InfoDisplay.Text = "Information Display";
+            this.InfoDisplay.Click += new System.EventHandler(this.toolStripButton4_Click_1);
             // 
             // toolStripButton2
             // 
@@ -548,16 +573,16 @@
             this.ChangeBackPanel.Text = "Change BackPanel";
             this.ChangeBackPanel.Click += new System.EventHandler(this.ChangeBackPanel_Click);
             // 
-            // ResetColors
+            // ResetToDefault
             // 
-            this.ResetColors.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ResetColors.Image = ((System.Drawing.Image)(resources.GetObject("ResetColors.Image")));
-            this.ResetColors.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ResetColors.Name = "ResetColors";
-            this.ResetColors.Size = new System.Drawing.Size(23, 22);
-            this.ResetColors.Text = "Reset Settings to Default";
-            this.ResetColors.ToolTipText = "ResetToDefault";
-            this.ResetColors.Click += new System.EventHandler(this.ResetColors_Click);
+            this.ResetToDefault.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ResetToDefault.Image = ((System.Drawing.Image)(resources.GetObject("ResetToDefault.Image")));
+            this.ResetToDefault.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ResetToDefault.Name = "ResetToDefault";
+            this.ResetToDefault.Size = new System.Drawing.Size(23, 22);
+            this.ResetToDefault.Text = "Reset Settings to Default";
+            this.ResetToDefault.ToolTipText = "ResetToDefault";
+            this.ResetToDefault.Click += new System.EventHandler(this.ResetColors_Click);
             // 
             // statusStrip1
             // 
@@ -576,41 +601,16 @@
             this.toolStripStatusLabelGenerations.Size = new System.Drawing.Size(90, 17);
             this.toolStripStatusLabelGenerations.Text = "Generations = 0";
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(81, 17);
             this.toolStripStatusLabel1.Text = "Living Cells=0";
             // 
-            // headsUpDisplayToolStripMenuItem
+            // contextMenuStrip1
             // 
-            this.headsUpDisplayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.onToolStripMenuItem2});
-            this.headsUpDisplayToolStripMenuItem.Name = "headsUpDisplayToolStripMenuItem";
-            this.headsUpDisplayToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.headsUpDisplayToolStripMenuItem.Text = "Information Display";
-            // 
-            // onToolStripMenuItem2
-            // 
-            this.onToolStripMenuItem2.Name = "onToolStripMenuItem2";
-            this.onToolStripMenuItem2.Size = new System.Drawing.Size(140, 22);
-            this.onToolStripMenuItem2.Text = "View Display";
-            this.onToolStripMenuItem2.Click += new System.EventHandler(this.onToolStripMenuItem2_Click);
-            // 
-            // InfoDisplay
-            // 
-            this.InfoDisplay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.InfoDisplay.Image = ((System.Drawing.Image)(resources.GetObject("InfoDisplay.Image")));
-            this.InfoDisplay.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.InfoDisplay.Name = "InfoDisplay";
-            this.InfoDisplay.Size = new System.Drawing.Size(23, 22);
-            this.InfoDisplay.Text = "Information Display";
-            this.InfoDisplay.Click += new System.EventHandler(this.toolStripButton4_Click_1);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // graphicsPanel1
             // 
@@ -711,7 +711,7 @@
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripButton SlowTimer;
-        private System.Windows.Forms.ToolStripButton ResetColors;
+        private System.Windows.Forms.ToolStripButton ResetToDefault;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripMenuItem headsUpDisplayToolStripMenuItem;

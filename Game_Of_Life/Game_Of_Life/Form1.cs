@@ -61,7 +61,7 @@ namespace Game_Of_Life
             InitializeComponent();
 
             // Setup the timer
-            timer.Interval = 1000; // milliseconds
+            timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false;
             cellColor =Properties.Settings.Default.CellColor;
@@ -136,7 +136,7 @@ namespace Game_Of_Life
 
         }
 
-        private int CountNeighboursToroidal(int row, int col)
+        private int CountNeighboursToroidal(int row, int col)//Toroidal Count from sketch notes
         {
             int count = 0;
             int xlen = universe.GetLength(0);
@@ -182,7 +182,7 @@ namespace Game_Of_Life
             {
                 for (int Col = 0; Col < universe.GetLength(1); Col++)
                 {
-                    if (CountStyle == true)
+                    if (CountStyle == true)//Option to allow for choosing counting behaviour
                     {
                         int Count = CountNeighboursToroidal(row, Col);
                         if (universe[row, Col] == true)
@@ -261,6 +261,7 @@ namespace Game_Of_Life
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             toolStripStatusLabel1.Text="Living Cells ="+LivingCells.ToString();
             universe = Grid;
+            
             graphicsPanel1.Invalidate();
         }
 
@@ -304,13 +305,20 @@ namespace Game_Of_Life
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
-                        if (NeighbourDisplay == true)
+                        if (NeighbourDisplay == true)//Added to allow for drawing in the number of neighbours
                         {
                             Font font = new Font("Retrieve", 10f);
                             StringFormat NumberFormat = new StringFormat();
                             NumberFormat.Alignment = StringAlignment.Center;
                             NumberFormat.LineAlignment = StringAlignment.Center;
-                            Count = CountNeighbours(x, y);
+                            if(CountStyle== true)
+                            {
+                                Count=CountNeighboursToroidal(x, y);
+                            }
+                            else
+                            {
+                                Count=CountNeighbours(x, y);
+                            }
                             if (Count > 3 || Count < 2)
                             {
                                 e.Graphics.DrawString(Count.ToString(), font, Brushes.Black, cellRect, NumberFormat);
@@ -352,7 +360,7 @@ namespace Game_Of_Life
 
                 // Toggle the cell's state
                 universe[x, y] = !universe[x, y];
-                if (universe[x,y])
+                if (universe[x,y])//Added logic to enable a real time count of the living cells on screen
                 {
                     LivingCells++;
                 }
@@ -495,7 +503,7 @@ namespace Game_Of_Life
             timer.Enabled = false;
             generations = 0;
             LivingCells = 0;
-            for(int col = 0; col< universe.GetLength(1);col++)
+            for(int col = 0; col< universe.GetLength(1);col++)//Looping through array to count living cells
             {
                 for(int row=0;row<universe.GetLength(0);row++)
                 {
@@ -510,7 +518,7 @@ namespace Game_Of_Life
             graphicsPanel1.Invalidate();
         }
 
-        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)//Turn on Grid Outline
         {
             GridDisplay = true;
             graphicsPanel1.Invalidate();
@@ -547,7 +555,7 @@ namespace Game_Of_Life
                 
                 
             }
-            Grid = new bool[Rows,Cols];
+            Grid = new bool[Rows,Cols];//Resizing scratchpad array for resizing main universe
             for(int x=0;x<Cols&&x<universe.GetLength(1);x++)
             {
                 for(int y=0;y<Rows&&y<universe.GetLength(0);y++)
@@ -625,7 +633,7 @@ namespace Game_Of_Life
                     universe=new bool[Width,Height];
                     Grid=new bool[Width,Height];
                 }
-                Load.BaseStream.Seek(0, SeekOrigin.Begin);
+                Load.BaseStream.Seek(0, SeekOrigin.Begin);//Resets reader to top of file
                 int y = 0;
                 while(!Load.EndOfStream)
                 {
@@ -691,6 +699,7 @@ namespace Game_Of_Life
             cellColor = Color.Gray;
             gridColor = Color.Black;
             graphicsPanel1.BackColor = Color.White;
+            timer.Interval = 1000;
             Rows = 20;
             Cols= 20;
             Grid = new bool[Rows, Cols];
@@ -723,6 +732,7 @@ namespace Game_Of_Life
         private void onToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             HeadsUp Display=new HeadsUp();
+            timer.Enabled = false;
             Display.SetGeneration("Generation = "+generations.ToString());
             Display.SetLivingCells("Living Cells = "+ LivingCells.ToString());
             Display.SetRows("Number of Rows = "+Rows.ToString());
@@ -735,16 +745,14 @@ namespace Game_Of_Life
             {
                 Display.SetBoundaryStyle("Boundary Style = Finite");
             }
-            
-           if(DialogResult.OK==Display.ShowDialog())
-            {
 
-            }
+            Display.Show();
         }
 
         private void toolStripButton4_Click_1(object sender, EventArgs e)
         {
             HeadsUp Display = new HeadsUp();
+            timer.Enabled=false;//Pause Game to view current stats in Display
             Display.SetGeneration("Generation = " + generations.ToString());
             Display.SetLivingCells("Living Cells = " + LivingCells.ToString());
             Display.SetRows("Number of Rows = " + Rows.ToString());
@@ -758,10 +766,7 @@ namespace Game_Of_Life
                 Display.SetBoundaryStyle("Boundary Style = Finite");
             }
 
-            if (DialogResult.OK == Display.ShowDialog())
-            {
-
-            }
+            Display.Show();
 
         }
     }
