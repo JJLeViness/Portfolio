@@ -489,6 +489,14 @@ namespace Game_Of_Life
 
         private void newRandomToolStripMenuItem_Click(object sender, EventArgs e)//Random Generated Array
         {
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(1); x++)
+                {
+                    universe[x, y] = false;
+                }
+                graphicsPanel1.Invalidate();
+            }
             Random random = new Random();
             for (int col = 0; col < universe.GetLength(1); col++)
             {
